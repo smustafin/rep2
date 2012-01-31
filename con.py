@@ -2,7 +2,7 @@ import requests
 import json
 log="smustafin"
 pasw="12as34df"
-user="smustafin"
+usr="smustafin"
 reqq=""
 user=raw_input("Pass username: ")
 while 1:
