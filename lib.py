@@ -11,8 +11,8 @@ if lin[0][0:6]=="login=":
     login=lin[0][6:]
 if lin[1][0:5]=="pass=":
     passw=lin[1][5:]
-if lin[2][0:4]=="org=":
-    nameorg=lin[2][4:]
+if lin[2][0:9]=="org_name=":
+    nameorg=lin[2][9:]
 try:
     tm1,tm2,tm3=login, passw, nameorg
     print tm1,tm2,tm3
@@ -22,9 +22,9 @@ except NameError:
 host="https://api.github.com/"
 login, passw, nameorg="smustafin","12as34df","orgtest1"
 #delete user from org
-def delFromOrg(user):
+def del_from_org(user):
     reqq='orgs/%s/members/%s' % (nameorg,user)
-    url=host + "%s" % (reqq)
+    url=host + reqq
     r = requests.delete(url, auth=(login,passw))
     if r.status_code==204:
         resp="User "+user+" was deleted"
@@ -51,7 +51,7 @@ def create_repo(namerep,descrip): #withot private
     #  print "Second parametr could be 'true' or 'false'"
     # else: 
     reqq='orgs/%s/repos' % (nameorg)
-    url=host + "%s" % (reqq)
+    url=host + reqq
     tmp='{"name":"%s","description":"%s"}' % (namerep,descrip)
     r = requests.post(url, auth=(login,passw),data=tmp)
     if r.status_code==201:
@@ -64,11 +64,28 @@ def create_repo(namerep,descrip): #withot private
     else:
         res="Error "+ r.headers['status']  
     return res
-
-#print creat_repo("shom5","cooool")
-#print delFromOrg("asfgdf"
-    
-    
-	
+#search id_team by name
+def search__id_team(team_name):
+    reqq='orgs/%s/teams' % (nameorg)
+    url=host + reqq
+    r = requests.get(url, auth=(login,passw))
+    cont=json.loads(r.content)
+    i=0    
+    while 1:
+        try:
+            if cont[i]['name']==team_name:
+                break
+            i+=1
+        except IndexError:
+            return "Team not found"            
+    return cont[i]['id']  
+#  
+def del_from_team(team_name):
+    #/teams/:id/members/:user
+    #reqq='teams/%s/members/'+user % (id_team)
+    #url=host + reqq
+    #r = requests.delete(url, auth=(login,passw))
+    return
+print search__id_team("repoooooooo-owners")
     
 
