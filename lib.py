@@ -65,7 +65,7 @@ def create_repo(namerep,descrip): #withot private
         res="Error "+ r.headers['status']  
     return res
 #search id_team by name
-def search__id_team(team_name):
+def search_id_team(team_name):
     reqq='orgs/%s/teams' % (nameorg)
     url=host + reqq
     r = requests.get(url, auth=(login,passw))
@@ -80,12 +80,18 @@ def search__id_team(team_name):
             return "Team not found"            
     return cont[i]['id']  
 #  
-def del_from_team(team_name):
+def del_from_team(user,team_name):
     #/teams/:id/members/:user
-    #reqq='teams/%s/members/'+user % (id_team)
-    #url=host + reqq
-    #r = requests.delete(url, auth=(login,passw))
-    return
-print search__id_team("repoooooooo-owners")
+    if search_id_team(team_name)=="Team not found":
+        return "Team not found"
+    reqq='teams/%s/members/%s' % (str(search_id_team(team_name)),user)
+    url=host + reqq
+    r = requests.delete(url, auth=(login,passw))
+    if r.status_code==204:
+        res="User '"+user+"' was deleted from team '"+team_name+"'"
+    else:
+        res="Error "+ r.headers['status']  
+    return res
+#print del_from_team("eg","repoo")
     
 
